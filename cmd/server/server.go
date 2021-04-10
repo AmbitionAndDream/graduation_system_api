@@ -2,15 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"graduation_system_api/internal/handler"
+	"graduation_system_api/internal"
 )
 
 func main() {
 	r := gin.Default()
-
-	g:=r.Group("/action_h")
-	g.GET("/:act",handler.Handler)
-	f:=r.Group("/action_m")
-	f.POST("/:act2", handler.Handler_02)
+	r.POST("/login", internal.Login)
+	g:=r.Group("/api")
+	g.Any("/:kind/:action", internal.Handler)
 	_ = r.Run()
 }
