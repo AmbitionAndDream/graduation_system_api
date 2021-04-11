@@ -1,4 +1,4 @@
-module graduation_system_api
+module github.com/AmbitionAndDream/graduation_system_api
 
 go 1.16
 

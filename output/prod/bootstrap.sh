@@ -13,7 +13,7 @@ else
 fi
 
 
-CONF_FILE=CUR_DIR/conf/config.toml
+CONF_FILE=${CUR_DIR}/conf/config.toml
 
 args="-config=$CONF_FILE"
 
