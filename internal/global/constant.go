@@ -5,7 +5,7 @@ package global
 //role
 const (
 	//管理员
-	Administrator    = 0
+	Administrator    = 1
 	//普通用户
-	NonAdministrator = 1
+	NonAdministrator = 0
 )
