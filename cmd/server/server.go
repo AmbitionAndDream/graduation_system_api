@@ -7,7 +7,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.POST("/login", internal.Login)
+	r.Any("/login", internal.Login)
 	g:=r.Group("/api")
 	g.Any("/:kind/:action", internal.Handler)
 	_ = r.Run()
