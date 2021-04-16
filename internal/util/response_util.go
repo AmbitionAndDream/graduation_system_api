@@ -24,6 +24,9 @@ func newOpenAPIResponse(ctx *gin.Context) domain.OpenAPIResponse {
 //构建成功请求的返回信息
 func BuildSuccessResp(ctx *gin.Context, data interface{}) {
 	resp := newOpenAPIResponse(ctx)
+	resp.ResponseMetaData.Error = &domain.OpenAPIError{
+		Code:    0,
+	}
 	if data != nil {
 		resp.Result = data
 	}

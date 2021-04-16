@@ -30,8 +30,8 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 	//}
 	if ctx.Request.Method==http.MethodPost {
 		type User struct {
-			PhoneNumber string `json:"phoneNumber" binding:"required"`
-			PassWord    string `json:"passWord" binding:"required"`
+			PhoneNumber string `json:"phone_number" binding:"required"`
+			PassWord    string `json:"pass_word" binding:"required"`
 		}
 		u := new(User)
 		if err = ctx.ShouldBind(&u); err != nil {
@@ -53,7 +53,8 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 		token :=auth.GetToken(role,u.PhoneNumber)
 		resp = struct {
 			Token string `json:"token"`
-		}{Token: token}
+			Is_admin int `json:"is_admin"`
+		}{Token: token, Is_admin: role}
 	}
 	if ctx.Request.Method==http.MethodGet {
 		type User1 struct {

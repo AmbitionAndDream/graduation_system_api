@@ -22,12 +22,6 @@ func Login(ctx *gin.Context){
 func Handler(ctx *gin.Context){
 	//从Header 获取token 进行check
 	//fusionHandler.HandleFrontierEvent(ctx)
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 95cb1272897492c242c503157d93aa1a8055cd25
 	if http.MethodGet == ctx.Request.Method {
 		util.BuildSuccessResp(ctx, struct {
 			Name string `json:"name"`
