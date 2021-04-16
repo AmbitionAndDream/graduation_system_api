@@ -20,7 +20,6 @@ func login(phoneNumber, password string) (int, error) {
 	conn := db.GetDb()
 	var uu User
 	conn.Where("phone = ?", phoneNumber).Find(&uu)
-	fmt.Printf("%#v\n", uu)
 	defer conn.Close()
 
 	if password == uu.Pwd {

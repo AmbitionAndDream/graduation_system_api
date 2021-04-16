@@ -3,6 +3,7 @@ package db
 import (
   "github.com/jinzhu/gorm"
 	"fmt"
+	"log"
   _ "github.com/go-sql-driver/mysql"
 )
 
@@ -10,9 +11,8 @@ func dbConn(User, Password, Host, Db string, Port int) *gorm.DB {
 	connArgs := fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", User, Password, Host, Port, Db)
 	db, err := gorm.Open("mysql", connArgs)
 	if err != nil {
-			return nil
-	}else{
-		fmt.Println(err)
+		log.Println(err)
+		return err
 	}
 	db.SingularTable(true)          //如果使用gorm来帮忙创建表时，这里填写false的话gorm会给表添加s后缀，填写true则不会
 	db.LogMode(true)                //打印sql语句
