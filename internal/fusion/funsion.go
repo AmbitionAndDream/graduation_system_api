@@ -5,7 +5,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"graduation_system_api/internal/auth"
 	"graduation_system_api/internal/errors"
+	"graduation_system_api/internal/util"
 	"net/http"
+	"log"
 )
 
 type newFusionHandler struct {
