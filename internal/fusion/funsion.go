@@ -72,6 +72,25 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 	return
 }
 
+// 一个kind  对应一个Handle 多个action
 func (f *newFusionHandler) HandleFrontierEvent(ctx *gin.Context) {
 
+}
+
+func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}, err error) {
+	// ctx.Param("action")
+	// del
+	action := ctx.Param("action")
+	if(action == "del") {
+		err = peopleDel(ctx.PostForm("phone"))
+		if(err != nil) {
+			log.Println(err)
+			util.BuildFailedResp(ctx, http.StatusBadRequest, err)
+			return
+		}
+	}
+	return 
+
+	// list
+	// add
 }

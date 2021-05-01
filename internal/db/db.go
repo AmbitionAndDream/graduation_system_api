@@ -12,7 +12,7 @@ func dbConn(User, Password, Host, Db string, Port int) *gorm.DB {
 	db, err := gorm.Open("mysql", connArgs)
 	if err != nil {
 		log.Println(err)
-		return err
+		// return err
 	}
 	db.SingularTable(true)          //如果使用gorm来帮忙创建表时，这里填写false的话gorm会给表添加s后缀，填写true则不会
 	db.LogMode(true)                //打印sql语句

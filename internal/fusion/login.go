@@ -4,8 +4,8 @@ import (
 	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/global"
 	"graduation_system_api/internal/db"
-	"fmt"
 )
+
 type User struct {
 	Id int
 	Phone string

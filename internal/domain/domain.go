@@ -18,3 +18,7 @@ type OpenAPIError struct {
 	Code    int `json:"code"`
 	Message string `json:"message"`
 }
+
+type TokenRole struct {
+	IsAdmin bool
+}
