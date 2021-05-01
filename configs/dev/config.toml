@@ -1,4 +1,16 @@
 # dev config
 
-#env
+[env]
 env = "dev"
+
+[database]
+server = "127.0.0.1"
+ports = [3306, 3307]
+passWord = "password"
+
+[database.connection]
+connectionMax = 50
+connectionMin = 10
+#空闲等待时间 5min
+idleTime = 30000
+
