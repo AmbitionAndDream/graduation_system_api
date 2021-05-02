@@ -16,4 +16,8 @@ func TestGetToken(t *testing.T) {
 func TestCheckToken(t *testing.T) {
 	t.Log(time.Now().UnixNano()/1000000)
 	t.Log(time.Now().Unix())
+	a:=map[int]string{}
+	a[1]="3"
+	a[1]="4"
+	t.Log(a)
 }

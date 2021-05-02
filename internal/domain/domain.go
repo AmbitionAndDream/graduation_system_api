@@ -9,13 +9,13 @@ type OpenAPIResponse struct {
 }
 
 type OpenAPIRespMetaData struct {
-	Kind   string       `json:"kind,omitempty"`
-	Action string       `json:"action,omitempty"`
+	Kind   string        `json:"kind,omitempty"`
+	Action string        `json:"action,omitempty"`
 	Error  *OpenAPIError `json:"error,omitempty"`
 }
 
 type OpenAPIError struct {
-	Code    int `json:"code"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
