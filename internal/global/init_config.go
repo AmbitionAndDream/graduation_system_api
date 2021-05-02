@@ -8,6 +8,7 @@ import (
 
 type Options struct {
 	Log bool
+	MySQL bool
 }
 
 type ServerConfig struct {
@@ -25,16 +26,18 @@ type EnvConfig struct {
 }
 
 type DBConfig struct {
-	Server     string
-	Ports      []int
+	User       string
 	PassWord   string
+	DbName     string
+	Server     string
+	Ports      int
 	Connection *Connection
 }
 
 type Connection struct {
-	ConnectionMax int
-	ConnectionMin int
-	IdleTime      int
+	MaxIdleConn     int
+	MaxOpenConn     int
+	ConnMaxIdleTime int
 }
 
 func must(f func() error) {
@@ -46,7 +49,7 @@ func must(f func() error) {
 var conf ServerConfig
 
 func InitConfig(filePath string, options *Options) error {
-	logrus.Infof("the config filepath is  %s", filePath)
+	logrus.Infof("the config filepath is %s", filePath)
 
 	if _, err := toml.DecodeFile(filePath, &conf); err != nil {
 		return err
@@ -57,11 +60,20 @@ func InitConfig(filePath string, options *Options) error {
 			return initLog()
 		})
 	}
+	if options.MySQL{
+		must(func() error {
+			return initMysql()
+		})
+	}
 	return nil
 }
 
-func getConfig() *ServerConfig {
+func GetConfig() *ServerConfig {
 	return &conf
+}
+
+func Close(){
+	closeMysql()
 }
 
 func initLog() error {

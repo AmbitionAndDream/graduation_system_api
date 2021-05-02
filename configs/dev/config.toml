@@ -4,13 +4,16 @@
 env = "dev"
 
 [database]
+#dsn="root:Xieyuhao19990429@tcp(127.0.0.1:3306)/project_management?charset=utf8&parseTime=True&loc=Local"
+user = "root"
+passWord = "Xieyuhao19990429"
+dbName = "project_management"
 server = "127.0.0.1"
-ports = [3306, 3307]
-passWord = "password"
+ports = 3306
 
 [database.connection]
-connectionMax = 50
-connectionMin = 10
+maxIdleConn = 10
+maxOpenConn = 100
 #空闲等待时间 5min
-idleTime = 30000
+connMaxIdleTime = 30000
 

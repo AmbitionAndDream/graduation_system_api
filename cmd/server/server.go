@@ -19,12 +19,15 @@ func main() {
 		flag.Parse()
 	}
 
-	options := &global.Options{Log: true}
+	options := &global.Options{
+		Log: true,
+		MySQL: true,
+	}
 	if err := global.InitConfig(*config,options);err != nil{
 		logrus.Errorf("init server config error %s",err.Error())
 		panic(err)
 	}
-
+	defer func() {global.Close()}()
 	//配置路由信息
 	r.Any("/login", internal.Login)
 	g:=r.Group("/api")

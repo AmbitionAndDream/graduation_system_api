@@ -32,8 +32,7 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 	//登陆
 	var role int
 	if role, err = login(u.PhoneNumber, u.PassWord); err != nil {
-		logrus.Errorf("login failed:%s", err.Error())
-		return
+		return nil,err
 	}
 	//生成token
 	token := auth.GetToken(role, u.PhoneNumber)
