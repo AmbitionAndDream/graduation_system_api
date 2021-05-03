@@ -21,3 +21,7 @@ type RequestPeople struct {
 	IsAdmin  int    `json:"is_admin" binding:"required"`
 	RoleType int    `json:"role_type" binding:"required"`
 }
+
+type RequestPeoplePhone struct {
+	 Phone string `json:"phone" binding:"required"`
+}

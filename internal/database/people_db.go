@@ -2,6 +2,7 @@ package database
 
 import (
 	"graduation_system_api/internal/database/domain"
+	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/global"
 )
 
@@ -28,4 +29,16 @@ func CreatePeople(user *domain.User) error {
 	db := global.GetDb()
 	result := db.Table("user").Create(user)
 	return result.Error
+}
+
+func PeopleDelDB(phone string) error {
+	db := global.GetDb()
+	res := db.Table("user").Where("phone = ?", phone).Delete(nil)
+	if err := res.Error; err != nil {
+		return res.Error
+	}else if res.RowsAffected == 0{
+		return errors.New(errors.ServerError, "查无此人")
+	}else {
+		return nil
+	}
 }

@@ -18,7 +18,7 @@ func init() {
 
 func setExpired(token string) {
 	lock.Lock()
-	expired[token] = time.Now().Add(time.Second * 5).Unix()
+	expired[token] = time.Now().Add(time.Hour * 5).Unix()
 	lock.Unlock()
 }
 

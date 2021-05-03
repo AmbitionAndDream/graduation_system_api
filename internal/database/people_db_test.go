@@ -37,3 +37,12 @@ func TestCreatePeople(t *testing.T) {
 		return
 	}
 }
+
+func TestPeopleDelDB (t *testing.T) {
+	dev.InitDevConf()
+	err := PeopleDelDB("18329968200")
+	if err != nil {
+		t.Log(err)
+		return
+	}
+}

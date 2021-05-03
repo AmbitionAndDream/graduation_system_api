@@ -37,7 +37,7 @@ func initMysql() (err error) {
 	}
 	sqlDB.SetMaxIdleConns(config.DBConfig.Connection.MaxIdleConn)
 	sqlDB.SetMaxOpenConns(config.DBConfig.Connection.MaxOpenConn)
-	sqlDB.SetConnMaxIdleTime(time.Millisecond * time.Duration(config.DBConfig.Connection.ConnMaxIdleTime))
+	sqlDB.SetConnMaxLifetime(time.Millisecond * time.Duration(config.DBConfig.Connection.ConnMaxIdleTime))
 
 	return nil
 }

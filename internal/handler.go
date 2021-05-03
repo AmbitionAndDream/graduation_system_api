@@ -40,6 +40,8 @@ func Handler(ctx *gin.Context) {
 	case "people":
 		resp, err := fusionHandler.HandlePeopleEvent(ctx)
 		if err != nil {
+			er := err.(*errors.Error)
+			util.BuildFailedResp(ctx, er.Code(), er)
 			return
 		}
 		util.BuildSuccessResp(ctx, resp)

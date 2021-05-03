@@ -2,6 +2,7 @@ package database
 
 import (
 	"graduation_system_api/internal/database/domain"
+	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/global"
 )
 
@@ -31,6 +32,9 @@ func SelectBusiness(limit,offset int) ([]domain.Business, error) {
 
 func DeleteBusiness(ids []int)error{
 	db:=global.GetDb()
-	result:=db.Table("business").Delete(&domain.Business{},ids)
+	result := db.Table("business").Delete(&domain.Business{},ids)
+	if db.RowsAffected == 0 {
+		return errors.New(errors.ServerError, "查无此业务线")
+	}
 	return result.Error
 }

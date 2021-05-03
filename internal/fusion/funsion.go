@@ -7,8 +7,6 @@ import (
 	"graduation_system_api/internal/domain"
 	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/global"
-	"graduation_system_api/internal/util"
-	"log"
 	"net/http"
 	"reflect"
 )
@@ -51,7 +49,7 @@ func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface
 	switch action {
 	case global.Create:
 		name := &domain.RequestBusinessName{}
-		if err := ctx.BindJSON(&name); err != nil {
+		if err := ctx.BindJSON(name); err != nil {
 			logrus.Errorf("business create param invalid ,the param is %v", name)
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
@@ -85,14 +83,15 @@ func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface
 func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}, err error) {
 	// del
 	action := ctx.Param("action")
-	if action == "del" {
-		err = peopleDel(ctx.PostForm("phone"))
-		if err != nil {
-			log.Println(err)
-			util.BuildFailedResp(ctx, http.StatusBadRequest, err)
-			return
-		}
-	}
+	//if action == "del" {
+	//	err = peopleDel(ctx.PostForm("phone"))
+	//	if(err != nil) {
+	//		logrus.Errorf("del people error: %s",err.Error())
+	//
+	//		//util.BuildFailedResp(ctx, http.StatusBadRequest, err)
+	//		return
+	//	}
+	//}
 	switch action {
 	case global.Select:
 		limit := ctx.Query("limit")
@@ -102,7 +101,6 @@ func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
 		return selectPeople(limit, offset)
-		return
 	case global.Create:
 		u := new(domain.RequestPeople)
 		if err = ctx.ShouldBind(u); err != nil {
@@ -113,8 +111,19 @@ func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}
 			return
 		}
 		return "people create successful", nil
-		return
+	case global.Delete:
+		phone := &domain.RequestPeoplePhone{}
+		if err := ctx.BindJSON(phone) ; err !=nil {
+			logrus.Errorf("people del params invalid, param:  %v",phone )
+			return nil,errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		if err = peopleDel(phone.Phone); err != nil{
+			logrus.Errorf("people del error: %s", err.Error())
+			return
+		}
+		return "people del successful", nil
 	}
+
 	return
 }
 
