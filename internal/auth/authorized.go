@@ -36,7 +36,7 @@ func getExpired(token string) (int64, bool) {
 func CheckToken(t string) error {
 	expired, exit := getExpired(t)
 	if !exit {
-		return errors.New(errors.TokenMissError, "token miss error")
+		return errors.New(errors.TokenInvalidError, "token invalid error")
 	}
 	date, err := base64.StdEncoding.DecodeString(t)
 	if err != nil {
@@ -52,7 +52,7 @@ func CheckToken(t string) error {
 		setExpired(t)
 	} else {
 
-		return errors.New(700, "token expired error")
+		return errors.New(errors.TokenExpiredError, "token expired error")
 	}
 
 	return nil

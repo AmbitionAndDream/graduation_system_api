@@ -6,7 +6,6 @@ import (
 	resp "graduation_system_api/internal/domain"
 	"graduation_system_api/internal/errors"
 	"strconv"
-	"strings"
 )
 
 func createBusiness(name string) error {
@@ -46,12 +45,12 @@ func selectBusiness(limit, offset string) (*resp.ResponseBusinessList, error) {
 	return res, nil
 }
 
-func deleteBusiness(idStr string) error {
-	id := strings.Split(idStr, ",")
-	var ids []int
-	for _, element := range id {
-		entry, _ := strconv.Atoi(element)
-		ids = append(ids, entry)
-	}
+func deleteBusiness(ids []int) error {
+	//id := strings.Split(idStr, ",")
+	//var ids []int
+	//for _, element := range id {
+	//	entry, _ := strconv.Atoi(element)
+	//	ids = append(ids, entry)
+	//}
 	return database.DeleteBusiness(ids)
 }

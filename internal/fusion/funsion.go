@@ -50,22 +50,22 @@ func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface
 	action := ctx.Param("action")
 	switch action {
 	case global.Create:
-		name := ctx.PostForm("name")
-		if !checkParam(name) {
-			logrus.Errorf("business create param invalid ,the param is %s", name)
+		name := &domain.RequestBusinessName{}
+		if err := ctx.BindJSON(&name); err != nil {
+			logrus.Errorf("business create param invalid ,the param is %v", name)
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = createBusiness(name); err != nil {
+		if err = createBusiness(name.Name); err != nil {
 			return
 		}
 		return "business create successful", nil
 	case global.Delete:
-		idStr := ctx.PostForm("business_id")
-		logrus.Errorf("business del param invalid ,the param is %s", idStr)
-		if !checkParam(idStr) {
+		ids := new(domain.RequestDeleteBusinessId)
+		if err = ctx.ShouldBind(ids); err != nil {
+			logrus.Errorf("business del param invalid ,the param is %v", ids)
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = deleteBusiness(idStr); err != nil {
+		if err = deleteBusiness(ids.BusinessId); err != nil {
 			return
 		}
 

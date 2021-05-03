@@ -26,10 +26,12 @@ func Handler(ctx *gin.Context) {
 	token := ctx.GetHeader("authorized")
 	if token == "" {
 		util.BuildFailedResp(ctx, errors.TokenMissError, errors.New(errors.TokenMissError, "token miss errored"))
+		return
 	}
 	if err := auth.CheckToken(token); err != nil {
 		er := err.(*errors.Error)
 		util.BuildFailedResp(ctx, er.Code(), er)
+		return
 	}
 
 	// 判断kind 找对应handle
