@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"strings"
 	"testing"
 	"time"
 )
@@ -20,4 +21,7 @@ func TestCheckToken(t *testing.T) {
 	a[1]="3"
 	a[1]="4"
 	t.Log(a)
+	b:=strings.Split("",",")
+	t.Log(b)
+	t.Log(len(b))
 }

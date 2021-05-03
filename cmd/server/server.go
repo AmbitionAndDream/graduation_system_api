@@ -30,6 +30,7 @@ func main() {
 	defer func() {global.Close()}()
 	//配置路由信息
 	r.Any("/login", internal.Login)
+
 	g:=r.Group("/api")
 	g.Any("/:kind/:action", internal.Handler)
 	if err := r.Run();err != nil{

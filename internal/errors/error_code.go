@@ -7,4 +7,5 @@ const (
 	TokenExpiredError  = 700
 	TokenInvalidError  = 701
 	TokenMissError  = 702
+	ParamInvalidError =800
 )
