@@ -9,6 +9,7 @@ import (
 	"graduation_system_api/internal/global"
 	"net/http"
 	"reflect"
+	"strconv"
 )
 
 type newFusionHandler struct {
@@ -43,6 +44,99 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 	return
 }
 
+func (f *newFusionHandler) HandleDemandEvent(ctx *gin.Context) (resp interface{}, err error) {
+	action := ctx.Param("action")
+	switch action {
+	case global.Create:
+		demand := new(domain.RequestDemand)
+		if err = ctx.ShouldBind(demand); err != nil {
+			logrus.Errorf("demand create param invalid ,the param is %s", err.Error())
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		return nil, createDemand(demand)
+	case global.Item:
+		item := new(domain.RequestDemandItem)
+		if err = ctx.ShouldBind(item); err != nil {
+			logrus.Errorf("demand update item param invalid ,the param is %s", err.Error())
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		return nil, updateItem(item)
+	case global.SetTime:
+		itemSetTime := new(domain.RequestDemandSetTime)
+		if err = ctx.ShouldBind(itemSetTime); err != nil {
+			logrus.Errorf("demand item setTime param invalid ,the param is %s", err.Error())
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		return nil, updateItemTime(itemSetTime)
+	case global.Solve:
+		solve := new(domain.RequestDemandItem)
+		if err = ctx.ShouldBind(solve); err != nil {
+			logrus.Errorf("demand item solve param invalid ,the param is %s", err.Error())
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		return nil, itemSolve(solve)
+	case global.SelectDemandMyList:
+		limit := ctx.Query("limit")
+		offset := ctx.Query("offset")
+		demandPhone := ctx.Query("phone")
+		if !checkParam(limit, offset, demandPhone) {
+			logrus.Errorf("demand my list param invalid ,the param limit: %s,offset:%s,demandPhone:%s", limit, offset, demandPhone)
+			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+			return nil, errors.New(errors.ParamInvalidError, "url 参数有误")
+		}
+		return selectDemandMyList(limit, offset, demandPhone)
+	case global.Select:
+		limit := ctx.Query("limit")
+		offset := ctx.Query("offset")
+		demandPhone := ctx.Query("phone")
+		isAll := ctx.Query("is_all")
+		status := ctx.Query("status")
+		if !checkParam(limit, offset, demandPhone, isAll, status) {
+			logrus.Errorf("demand list param invalid ,the param limit: %s,offset:%s,demandPhone:%s,isAll:%s,status:%s", limit, offset, demandPhone, isAll, status)
+			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+			return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+		}
+		if (isAll != "true" && isAll != "false") || (status != "0" && status != "1") {
+			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+			return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+		}
+		return selectDemandList(limit, offset, demandPhone, isAll, status)
+	case global.Delete:
+		ids := new(domain.RequestDeleteDemandId)
+		if err = ctx.ShouldBind(ids); err != nil {
+			logrus.Errorf("demand del param invalid ,the param is %v", ids)
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
+		}
+		return nil, deleteDemand(ids.DemandId)
+	case global.SelectPoolList:
+		return selectPoolList()
+	case global.Detail:
+		demandId := ctx.Query("demand_id")
+		if !checkParam(demandId) {
+			logrus.Errorf("demand detail param invalid ,the param demand_id:%s", demandId)
+			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+			return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+		}
+		did, _ := strconv.Atoi(demandId)
+		return selectDemandById(did)
+	default:
+		logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+	}
+}
+func (f *newFusionHandler) HandleBugEvent(ctx *gin.Context) (resp interface{}, err error) {
+	action := ctx.Param("action")
+	switch action {
+	case global.Create:
+		return nil, err
+	case global.Delete:
+		return nil, err
+	default:
+		logrus.Errorf("HandleBugEvent url param error ,url:%s", ctx.Request.URL.String())
+		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+	}
+}
+
 // 一个kind  对应一个Handle 多个action
 func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface{}, err error) {
 	action := ctx.Param("action")
@@ -50,24 +144,17 @@ func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface
 	case global.Create:
 		name := &domain.RequestBusinessName{}
 		if err := ctx.BindJSON(name); err != nil {
-			logrus.Errorf("business create param invalid ,the param is %v", name)
+			logrus.Errorf("business create param invalid ,the error is %s", err.Error())
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = createBusiness(name.Name); err != nil {
-			return
-		}
-		return "business create successful", nil
+		return nil, createBusiness(name.Name)
 	case global.Delete:
 		ids := new(domain.RequestDeleteBusinessId)
 		if err = ctx.ShouldBind(ids); err != nil {
-			logrus.Errorf("business del param invalid ,the param is %v", ids)
+			logrus.Errorf("business del param invalid ,the error is %s", err.Error())
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = deleteBusiness(ids.BusinessId); err != nil {
-			return
-		}
-
-		return "business delete successful", nil
+		return nil, deleteBusiness(ids.BusinessId)
 	case global.Select:
 		limit := ctx.Query("limit")
 		offset := ctx.Query("offset")
@@ -76,22 +163,15 @@ func (f *newFusionHandler) HandleBusinessEvent(ctx *gin.Context) (resp interface
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
 		return selectBusiness(limit, offset)
+	default:
+		logrus.Errorf("HandleBusinessEvent url param error ,url:%s", ctx.Request.URL.String())
+		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
 	}
-	return
 }
 
 func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}, err error) {
 	// del
 	action := ctx.Param("action")
-	//if action == "del" {
-	//	err = peopleDel(ctx.PostForm("phone"))
-	//	if(err != nil) {
-	//		logrus.Errorf("del people error: %s",err.Error())
-	//
-	//		//util.BuildFailedResp(ctx, http.StatusBadRequest, err)
-	//		return
-	//	}
-	//}
 	switch action {
 	case global.Select:
 		limit := ctx.Query("limit")
@@ -107,24 +187,22 @@ func (f *newFusionHandler) HandlePeopleEvent(ctx *gin.Context) (resp interface{}
 			logrus.Errorf("parse people list params failed ,error: %s", err.Error())
 			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = createPeople(u); err != nil {
-			return
-		}
-		return "people create successful", nil
+		return nil, createPeople(u)
 	case global.Delete:
 		phone := &domain.RequestPeoplePhone{}
-		if err := ctx.BindJSON(phone) ; err !=nil {
-			logrus.Errorf("people del params invalid, param:  %v",phone )
-			return nil,errors.New(errors.ParamInvalidError, "param invalid error")
+		if err := ctx.BindJSON(phone); err != nil {
+			logrus.Errorf("people del params invalid, the error is %s", err.Error())
+			return nil, errors.New(errors.ParamInvalidError, "param invalid error")
 		}
-		if err = peopleDel(phone.Phone); err != nil{
+		if err = peopleDel(phone.Phone); err != nil {
 			logrus.Errorf("people del error: %s", err.Error())
 			return
 		}
 		return "people del successful", nil
+	default:
+		logrus.Errorf("HandlePeopleEvent url param error ,url:%s", ctx.Request.URL.String())
+		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
 	}
-
-	return
 }
 
 func checkParam(date ...interface{}) bool {

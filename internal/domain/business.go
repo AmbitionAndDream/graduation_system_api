@@ -1,7 +1,7 @@
 package domain
 
 type ResponseBusinessList struct {
-	Total  int                `json:"total"`
+	Total  int64              `json:"total"`
 	Limit  int                `json:"limit"`
 	Offset int                `json:"offset"`
 	Bus    []ResponseBusiness `json:"business"`

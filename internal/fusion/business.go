@@ -26,6 +26,13 @@ func selectBusiness(limit, offset string) (*resp.ResponseBusinessList, error) {
 		return nil, errors.New(errors.ServerError, "select failed")
 	}
 	logrus.Infof("the business list is %v", result)
+	//查totalCount
+	totalCount, err := database.SelectAllBusiness()
+	if err != nil {
+		logrus.Errorf("select business totalCount failed error :%s", err.Error())
+		return nil, errors.New(errors.ServerError, "select failed")
+	}
+	logrus.Infof("the business totalCount is %d", totalCount)
 	//数据组装
 	var r []resp.ResponseBusiness
 	for _, element := range result {
@@ -36,7 +43,7 @@ func selectBusiness(limit, offset string) (*resp.ResponseBusinessList, error) {
 	}
 	//构造返回体
 	res := &resp.ResponseBusinessList{
-		Total:  len(r),
+		Total:  totalCount,
 		Bus:    r,
 		Limit:  l,
 		Offset: o,

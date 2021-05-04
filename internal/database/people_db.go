@@ -17,6 +17,12 @@ func Login(phoneNumber, password string) (*domain.User, error) {
 		return nil, result.Error
 	}
 }
+func SelectAllPeople() (int64, error) {
+	db := global.GetDb()
+	var user []domain.User
+	result := db.Table("user").Order("id asc").Find(&user)
+	return result.RowsAffected, result.Error
+}
 
 func SelectPeople(limit, offset int) ([]domain.User, error) {
 	db := global.GetDb()
@@ -36,9 +42,9 @@ func PeopleDelDB(phone string) error {
 	res := db.Table("user").Where("phone = ?", phone).Delete(nil)
 	if err := res.Error; err != nil {
 		return res.Error
-	}else if res.RowsAffected == 0{
+	} else if res.RowsAffected == 0 {
 		return errors.New(errors.ServerError, "查无此人")
-	}else {
+	} else {
 		return nil
 	}
 }

@@ -40,6 +40,12 @@ func selectPeople(limit, offset string) (*resp.ResponsePeopleList, error) {
 		return nil, errors.New(errors.ServerError, "select failed")
 	}
 	logrus.Infof("the people list is %v", result)
+	totalCount, err := database.SelectAllPeople()
+	if err != nil {
+		logrus.Errorf("select people totalCount failed error :%s", err.Error())
+		return nil, errors.New(errors.ServerError, "select failed")
+	}
+	logrus.Infof("the people totalCount is %d", totalCount)
 	//数据组装
 	var r []resp.ResponsePeople
 	for _, element := range result {
@@ -53,7 +59,7 @@ func selectPeople(limit, offset string) (*resp.ResponsePeopleList, error) {
 	}
 	//构造返回体
 	res := &resp.ResponsePeopleList{
-		Total:  len(r),
+		Total:  totalCount,
 		User:   r,
 		Limit:  l,
 		Offset: o,

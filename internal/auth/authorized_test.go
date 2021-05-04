@@ -24,4 +24,24 @@ func TestCheckToken(t *testing.T) {
 	b:=strings.Split("",",")
 	t.Log(b)
 	t.Log(len(b))
+	r:=3
+	switch r {
+	case 1:
+		t.Log("heihei")
+	case 2:
+		t.Log("hahah")
+	case 3:
+		t.Log("lalal")
+	default:
+		t.Log("huhuhu")
+	}
+}
+
+func TestCheckToken2(t *testing.T) {
+	sli:=[]int{1,2,3,4,5,6,7,8,9,0,11}
+	t.Log(sli[1:])
+	t.Log(sli[0:])
+	t.Log(sli[9:10])
+	t.Log(sli[1:5+1])
+	t.Log(sli[len(sli):])
 }

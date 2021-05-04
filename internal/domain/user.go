@@ -1,7 +1,7 @@
 package domain
 
 type ResponsePeopleList struct {
-	Total  int              `json:"total"`
+	Total  int64            `json:"total"`
 	Limit  int              `json:"limit"`
 	Offset int              `json:"offset"`
 	User   []ResponsePeople `json:"user"`
@@ -23,5 +23,5 @@ type RequestPeople struct {
 }
 
 type RequestPeoplePhone struct {
-	 Phone string `json:"phone" binding:"required"`
+	Phone string `json:"phone" binding:"required"`
 }
