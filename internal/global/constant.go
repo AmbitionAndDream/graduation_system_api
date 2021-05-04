@@ -43,3 +43,8 @@ const (
 	AcceptancePoll
 	CompletePoll
 )
+
+const (
+	ReporterId = 0
+	HandlerId  = 1
+)

@@ -19,7 +19,7 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	demandLists, err := database.SelectAllDemandList()
 	if err != nil {
 		logrus.Errorf("select demand list failed error :%s", err.Error())
-		return nil, errors.New(errors.ServerError, "select demand by id failed")
+		return nil, errors.New(errors.ServerError, "select demand pool list by id failed")
 	}
 	logrus.Infof("select demand list is :%v", demandLists)
 	//数据转换(只为拿到转换后的pojo)
@@ -199,14 +199,14 @@ func selectDemandList(limit, offset, demandPhone, isAll, status string) (*resp.R
 	result, err := database.SelectDemandList(l, o)
 	if err != nil {
 		logrus.Errorf("select demand list failed error :%s", err.Error())
-		return nil, errors.New(errors.ServerError, "select failed")
+		return nil, errors.New(errors.ServerError, "select demand list failed")
 	}
 	logrus.Infof("the demand my list is %v", result)
 	//查totalCount
 	totalCount, err := database.SelectAllDemandListCount()
 	if err != nil {
 		logrus.Errorf("select demand list totalCount failed error :%s", err.Error())
-		return nil, errors.New(errors.ServerError, "select failed")
+		return nil, errors.New(errors.ServerError, "select demand total failed")
 	}
 	logrus.Infof("the demand my list totalCount is %d", totalCount)
 	response, err := buildDemandResultList(result, totalCount, l, o)
@@ -294,7 +294,7 @@ func createDemand(demand *req.RequestDemand) error {
 	}
 	if err := database.CreateDemand(dbDemand); err != nil {
 		logrus.Errorf("insert demand param:%v,failed error :%s", demand, err.Error())
-		return errors.New(errors.ServerError, "insert failed")
+		return errors.New(errors.ServerError, "create failed")
 	}
 	return nil
 }
