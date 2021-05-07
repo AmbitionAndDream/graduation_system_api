@@ -9,16 +9,16 @@ import (
 	"graduation_system_api/internal/errors"
 )
 
-func login(phoneNumber, password string) (int, error) {
+func login(phoneNumber, password string) (int, string, error) {
 	u, err := database.Login(phoneNumber, password)
 	if err != nil {
 		logrus.Errorf("select db failed error is :%s",err.Error())
-		return -2, errors.New(errors.ServerError,"Server failed")
+		return -2,"", errors.New(errors.ServerError,"Server failed")
 	}
 	if u == nil {
-		return -2, errors.New(errors.UserUndefinedError, "UserUndefinedError")
+		return -2, "", errors.New(errors.UserUndefinedError, "用户密码错误或未注册账号")
 	} else {
-		return u.IsAdmin, nil
+		return u.IsAdmin, u.Name, nil
 	}
 	//db select
 	//conn := db.GetDb()

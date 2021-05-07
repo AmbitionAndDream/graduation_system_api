@@ -12,13 +12,14 @@ type ResponsePeople struct {
 	PhoneNumber string `json:"phone_number"`
 	RoleType    int    `json:"role_type"`
 	IsAdmin     bool   `json:"is_admin"`
+	Avatar 		string `json:"avatar"`
 }
 
 type RequestPeople struct {
 	Name     string `json:"name" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 	PassWord string `json:"pass_word" binding:"required"`
-	IsAdmin  int    `json:"is_admin" binding:"required"`
+	IsAdmin  int    `json:"is_admin"`
 	RoleType int    `json:"role_type" binding:"required"`
 }
 

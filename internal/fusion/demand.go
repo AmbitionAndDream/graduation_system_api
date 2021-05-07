@@ -170,7 +170,7 @@ func updateItemTime(item *req.RequestDemandSetTime) error {
 	//遍历修改数据
 	for _, element := range result.DemandNodeInfo {
 		if element.ItemId == item.ItemId {
-			element.Time = item.Time
+			element.StartTime = item.StartTime
 		}
 	}
 	//update
@@ -319,8 +319,7 @@ func buildDemandResultList(result []domain.Demand, total int64, limit, offset in
 }
 
 func buildDemandResult(element *domain.Demand) (*resp.ResponseDemand, error) {
-	r := new(resp.ResponseDemand)
-	var entry resp.ResponseDemand
+	entry := new(resp.ResponseDemand)
 	var i []resp.ResponseDemandNodeInfo
 	entry.DemandName = element.DemandName
 	entry.DemandLink = element.DemandLink
@@ -336,5 +335,5 @@ func buildDemandResult(element *domain.Demand) (*resp.ResponseDemand, error) {
 	entry.DemandNodeInfo = i
 	logrus.Infof("the demand my list entry is %v", entry)
 
-	return r, nil
+	return entry, nil
 }

@@ -55,6 +55,7 @@ func selectPeople(limit, offset string) (*resp.ResponsePeopleList, error) {
 		entry.PhoneNumber = element.PhoneNumber
 		entry.IsAdmin = isAdmin(element.IsAdmin)
 		entry.RoleType = element.RoleType
+		entry.Avatar = element.Avatar
 		r = append(r, entry)
 	}
 	//构造返回体

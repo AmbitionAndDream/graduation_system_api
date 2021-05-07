@@ -27,7 +27,7 @@ func selectBusiness(limit, offset string) (*resp.ResponseBusinessList, error) {
 	}
 	logrus.Infof("the business list is %v", result)
 	//查totalCount
-	totalCount, err := database.SelectAllBusiness()
+	totalCount,  err := database.SelectAllBusiness()
 	if err != nil {
 		logrus.Errorf("select business totalCount failed error :%s", err.Error())
 		return nil, errors.New(errors.ServerError, "select failed")

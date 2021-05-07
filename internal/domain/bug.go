@@ -9,35 +9,35 @@ type RequestBugSolve struct {
 type RequestBug struct {
 	SystemId       int    `json:"system_id" binding:"required"`
 	DemandId       int    `json:"demand_id" binding:"required"`
-	BugName        int    `json:"title" binding:"required"`
 	PriorityStatus int    `json:"priority_status" binding:"required"`
+	BugName        string `json:"title" binding:"required"`
 	ReporterId     string `json:"reporter_id" binding:"required"`
 	HandlerId      string `json:"handler_id" binding:"required"`
 	Type           int    `json:"type" binding:"required"`
 	Opportunity    int    `json:"opportunity" binding:"required"`
-	SolveType      int    `json:"solve_type" binding:"required"`
-	Desc           string `json:"desc" binding:"required"`
+	SolveType      int    `json:"solve_type"`
+	Desc           string `json:"desc"`
 }
 
 type BugList struct {
-	Limit          int
-	Offset         int
-	Status         int
-	BeginTime      int64
-	EndTime        int64
-	SolveType      int
-	Type           int
-	Opportunity    int
-	IsAssign       int
-	PriorityStatus int
-	PeoplePhone    string
+	Limit          int    `json:"limit" binding:"required"`
+	Offset         int	  `json:"offset" binding:"required"`
+	Status         int	  `json:"status"`
+	BeginTime      int64  `json:"begin_time"`
+	EndTime        int64  `json:"end_time"`
+	SolveType      int	  `json:"solve_type"`
+	Type           int    `json:"type"`
+	Opportunity    int	  `json:"opportunity"`
+	IsAssign       int	  `json:"is_assign"`
+	PriorityStatus int    `json:"priority_status"`
+	PeoplePhone    string `json:"phone"`
 }
 
 type ResponseBug struct {
 	BugId          int    `json:"bug_id"`
 	SystemId       int    `json:"system_id" `
 	DemandId       int    `json:"demand_id"`
-	BugName        int    `json:"title"`
+	BugName        string `json:"title"`
 	PriorityStatus int    `json:"priority_status" `
 	ReporterId     string `json:"reporter_id" `
 	HandlerId      string `json:"handler_id" `

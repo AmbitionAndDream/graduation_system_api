@@ -42,7 +42,6 @@ func selectBugList(bug *req.BugList) (*resp.ResponseBug, error) {
 
 func createBug(reqBug *req.RequestBug) error {
 	bug := new(domain.Bug)
-	bug.SolveType = reqBug.SolveType
 	bug.SystemId = reqBug.SystemId
 	bug.DemandId = reqBug.DemandId
 	bug.Opportunity = reqBug.Opportunity

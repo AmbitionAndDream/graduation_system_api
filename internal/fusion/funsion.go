@@ -33,14 +33,16 @@ func (f *newFusionHandler) HandlerLoginEvent(ctx *gin.Context) (resp interface{}
 
 	//登陆
 	var role int
-	if role, err = login(u.PhoneNumber, u.PassWord); err != nil {
+	var username string
+	if role, username, err = login(u.PhoneNumber, u.PassWord); err != nil {
 		return nil, err
 	}
 	//生成token
 	token := auth.GetToken(role, u.PhoneNumber)
 	resp = struct {
 		Token string `json:"token"`
-	}{Token: token}
+		Name string `json:"name"`
+	}{Token: token, Name: username }
 	return
 }
 
@@ -165,8 +167,8 @@ func getBugParam(ctx *gin.Context) (*domain.BugList, error) {
 	opportunity := ctx.Query("opportunity")
 	priorityStatus := ctx.Query("priority_status")
 	phone := ctx.Query("user_id")
-	if !checkParam(limit, offset, isAssign, status, solveType, beginTime, endTime, t, opportunity, priorityStatus, phone) {
-		logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
+	if !checkParam(limit, offset, phone) {
+		logrus.Errorf("HandleBugEvent url param error ,url:%s", ctx.Request.URL.String())
 		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
 	}
 	l, _ := strconv.Atoi(limit)

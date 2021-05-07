@@ -4,7 +4,7 @@ type RequestDemand struct {
 	DemandName           string              `json:"name" binding:"required"`
 	DemandLink           string              `json:"link" binding:"required"`
 	DemandPriorityStatus int                 `json:"priority_status" binding:"required"`
-	DemandNote           string              `json:"note" binding:"required"`
+	DemandNote           string              `json:"note"`
 	BusinessId           int                 `json:"business_id" binding:"required"`
 	PeoplePhone          string              `json:"user_id" binding:"required"` //需求负责人(创建)
 	DemandNodeInfo       []RequestDemandInfo `json:"info" binding:"required"`
@@ -14,10 +14,11 @@ type RequestDemandInfo struct {
 	ItemId      int    `json:"item_id" binding:"required"`
 	ItemType    int    `json:"item_type" binding:"required"`
 	Title       string `json:"title" binding:"required"`
-	Avatar      string `json:"avatar" binding:"required"`
-	PeoplePhone string `json:"info_user_id" binding:"required"` //需求处理人（解决）
-	PeopleName  string `json:"user_name" binding:"required"`
-	Time        int64  `json:"time" binding:"required"`
+	Avatar      string `json:"avatar"`
+	PeoplePhone string `json:"info_user_id"` //需求处理人（解决）
+	PeopleName  string `json:"user_name"`
+	StartTime   int64  `json:"start_time"`
+	EndTime		int64  `json:"end_time"`
 	Status      int64  `json:"status" binding:"required"`
 }
 
@@ -31,7 +32,8 @@ type RequestDemandSetTime struct {
 	ItemId          int    `json:"item_id" binding:"required"`
 	DemandId        int    `json:"demand_id" binding:"required"`
 	NodePeoplePhone string `json:"user_id" binding:"required"`
-	Time            int64  `json:"time" binding:"required"`
+	StartTime       int64  `json:"start_time" binding:"required"`
+	EndTime         int64  `json:"end_time" binding:"required"`
 }
 
 type RequestDeleteDemandId struct {
@@ -63,7 +65,8 @@ type ResponseDemandNodeInfo struct {
 	Avatar      string `json:"avatar"`
 	PeoplePhone string `json:"info_user_id" `
 	PeopleName  string `json:"user_name"`
-	Time        int64  `json:"time"`
+	StartTime   int64  `json:"start_time"`
+	EndTime		int64  `json:"end_time"`
 	Status      int64  `json:"status"`
 }
 

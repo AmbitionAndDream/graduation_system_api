@@ -39,7 +39,7 @@ func SelectBusiness(limit, offset int) ([]domain.Business, error) {
 func DeleteBusiness(ids []int) error {
 	db := global.GetDb()
 	result := db.Table("business").Delete(&domain.Business{}, ids)
-	if db.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return errors.New(errors.ServerError, "查无此业务线")
 	}
 	return result.Error

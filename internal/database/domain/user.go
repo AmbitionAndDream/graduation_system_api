@@ -7,4 +7,5 @@ type User struct {
 	PassWord    string `gorm:"column:pwd"`
 	RoleType    int
 	IsAdmin     int
+	Avatar 		string
 }
