@@ -18,9 +18,9 @@ func CreateBug(bug *domain.Bug) error {
 	return result.Error
 }
 
-func SelectBugListHandler(bug *req.BugList) (*domain.Bug, error) {
+func SelectBugListHandler(bug *req.BugList) ([]domain.Bug, error) {
 	db := global.GetDb()
-	b := new(domain.Bug)
+	var b []domain.Bug
 	db = db.Table("bug")
 	if bug.Type != 0  {
 		db = db.Where("type=?", bug.Type)
@@ -54,9 +54,9 @@ func SelectBugListHandler(bug *req.BugList) (*domain.Bug, error) {
 	return b, result.Error
 }
 
-func SelectBugListReporter(bug *req.BugList) (*domain.Bug, error) {
+func SelectBugListReporter(bug *req.BugList) ([]domain.Bug, error) {
 	db := global.GetDb()
-	b := new(domain.Bug)
+	var b []domain.Bug
 	db = db.Table("bug")
 
 	if bug.Type != 0  {

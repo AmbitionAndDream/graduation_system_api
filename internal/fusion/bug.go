@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-func selectBugList(bug *req.BugList) (*resp.ResponseBug, error) {
+func selectBugList(bug *req.BugList) (*resp.ResponseBugList, error) {
 	bugDb := new(domain.Bug)
 	bugDb.BeginTime = bug.BeginTime
-	b := new(domain.Bug)
+	var b []domain.Bug
 	var err error
 	if bug.IsAssign == global.ReporterId {
 		b, err = database.SelectBugListHandler(bug)
@@ -25,18 +25,55 @@ func selectBugList(bug *req.BugList) (*resp.ResponseBug, error) {
 		logrus.Errorf("select bug failed param:%v,error:%s", bugDb, err.Error())
 		return nil, errors.New(errors.ServerError, "select bug failed")
 	}
+	return buildBugResultList(b, int64(len(b)), bug.Limit, bug.Offset)
+	//var bugList []resp.ResponseBug
+	//
+	//return &resp.ResponseBug{
+	//	BugId:          b.BugId,
+	//	SystemId:       b.SystemId,
+	//	DemandId:       b.DemandId,
+	//	BugName:        b.BugName,
+	//	PriorityStatus: b.PriorityStatus,
+	//	ReporterId:     b.ReporterId,
+	//	HandlerId:      b.HandlerId,
+	//	Type:           b.Type,
+	//	Opportunity:    b.Opportunity,
+	//	BeginTime:      b.BeginTime,
+	//	SolveType:      b.SolveType,
+	//}, nil
+}
+func buildBugResultList(result []domain.Bug, total int64, limit, offset int) (*resp.ResponseBugList, error) {
+	var r []resp.ResponseBug
+	for _, element := range result {
+		demand, err := buildBugResult(&element)
+		if err != nil {
+			return nil, err
+		}
+		r = append(r, *demand)
+	}
+	//构造返回体
+	res := &resp.ResponseBugList{
+		Total:   total,
+		BugList: r,
+		Limit:   limit,
+		Offset:  offset,
+	}
+	return res, nil
+}
+
+func buildBugResult(element *domain.Bug) (*resp.ResponseBug, error) {
 	return &resp.ResponseBug{
-		BugId:          b.BugId,
-		SystemId:       b.SystemId,
-		DemandId:       b.DemandId,
-		BugName:        b.BugName,
-		PriorityStatus: b.PriorityStatus,
-		ReporterId:     b.ReporterId,
-		HandlerId:      b.HandlerId,
-		Type:           b.Type,
-		Opportunity:    b.Opportunity,
-		BeginTime:      b.BeginTime,
-		SolveType:      b.SolveType,
+		BugId:          element.BugId,
+		SystemId:       element.SystemId,
+		DemandId:       element.DemandId,
+		BugName:        element.BugName,
+		PriorityStatus: element.PriorityStatus,
+		ReporterId:     element.ReporterId,
+		HandlerId:      element.HandlerId,
+		Type:           element.Type,
+		Opportunity:    element.Opportunity,
+		BeginTime:      element.BeginTime,
+		SolveType:      element.SolveType,
 	}, nil
 }
 

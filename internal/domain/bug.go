@@ -33,6 +33,13 @@ type BugList struct {
 	PeoplePhone    string `json:"phone"`
 }
 
+type ResponseBugList struct {
+	Total   int64         `json:"total"`
+	Limit   int           `json:"limit"`
+	Offset  int           `json:"offset"`
+	BugList []ResponseBug `json:"bug_list"`
+}
+
 type ResponseBug struct {
 	BugId          int    `json:"bug_id"`
 	SystemId       int    `json:"system_id" `
