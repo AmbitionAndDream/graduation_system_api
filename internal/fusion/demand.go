@@ -31,7 +31,7 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	reviewPool := new(resp.ResponseReviewPool)
 	var reviewPoolDemandList []resp.ResponseDemand
 	for _, element := range result.DemandList {
-		var itemInfo []resp.ResponseDemandNodeInfo
+		var itemInfo []*resp.ResponseDemandNodeInfo
 		for _, item := range element.DemandNodeInfo {
 			if item.Status == global.NotFinish && item.ItemType == global.ReviewPoll {
 				itemInfo = append(itemInfo, item)
@@ -39,8 +39,11 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 			}
 		}
 		//赋值
-		element.DemandNodeInfo = itemInfo
-		reviewPoolDemandList = append(reviewPoolDemandList, element)
+		if len(itemInfo) !=0{
+			element.DemandNodeInfo = itemInfo
+			reviewPoolDemandList = append(reviewPoolDemandList, element)
+		}
+
 	}
 	reviewPool.DemandList = reviewPoolDemandList
 	reviewPool.Total = int64(len(reviewPoolDemandList))
@@ -48,16 +51,19 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	developmentPoll := new(resp.ResponseDevelopmentPoll)
 	var developmentPollDemandList []resp.ResponseDemand
 	for _, element := range result.DemandList {
-		var itemInfo []resp.ResponseDemandNodeInfo
-		for _, item := range element.DemandNodeInfo {
-			if item.Status == global.NotFinish && item.ItemType == global.DevelopmentPoll {
+		var itemInfo []*resp.ResponseDemandNodeInfo
+		for index, item := range element.DemandNodeInfo {
+			if item.Status == global.NotFinish && item.ItemType == global.DevelopmentPoll && element.DemandNodeInfo[index-1].Status==global.Finish{
 				itemInfo = append(itemInfo, item)
 				break
 			}
 		}
 		//赋值
-		element.DemandNodeInfo = itemInfo
-		developmentPollDemandList = append(developmentPollDemandList, element)
+		if len(itemInfo) != 0 {
+			element.DemandNodeInfo = itemInfo
+			developmentPollDemandList = append(developmentPollDemandList, element)
+		}
+
 	}
 	developmentPoll.DemandList = developmentPollDemandList
 	developmentPoll.Total = int64(len(developmentPollDemandList))
@@ -65,16 +71,18 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	testPoll := new(resp.ResponseTestPoll)
 	var testPollDemandList []resp.ResponseDemand
 	for _, element := range result.DemandList {
-		var itemInfo []resp.ResponseDemandNodeInfo
-		for _, item := range element.DemandNodeInfo {
-			if item.Status == global.NotFinish && item.ItemType == global.TestPoll {
+		var itemInfo []*resp.ResponseDemandNodeInfo
+		for index, item := range element.DemandNodeInfo {
+			if item.Status == global.NotFinish && item.ItemType == global.TestPoll && element.DemandNodeInfo[index-1].Status==global.Finish{
 				itemInfo = append(itemInfo, item)
 				break
 			}
 		}
 		//赋值
-		element.DemandNodeInfo = itemInfo
-		testPollDemandList = append(testPollDemandList, element)
+		if len(itemInfo)!=0 {
+			element.DemandNodeInfo = itemInfo
+			testPollDemandList = append(testPollDemandList, element)
+		}
 	}
 	testPoll.DemandList = testPollDemandList
 	testPoll.Total = int64(len(testPollDemandList))
@@ -82,16 +90,18 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	acceptancePoll := new(resp.ResponseAcceptancePoll)
 	var acceptancePollDemandList []resp.ResponseDemand
 	for _, element := range result.DemandList {
-		var itemInfo []resp.ResponseDemandNodeInfo
-		for _, item := range element.DemandNodeInfo {
-			if item.Status == global.NotFinish && item.ItemType == global.AcceptancePoll {
+		var itemInfo []*resp.ResponseDemandNodeInfo
+		for index, item := range element.DemandNodeInfo {
+			if item.Status == global.NotFinish && item.ItemType == global.AcceptancePoll && element.DemandNodeInfo[index-1].Status==global.Finish{
 				itemInfo = append(itemInfo, item)
 				break
 			}
 		}
 		//赋值
-		element.DemandNodeInfo = itemInfo
-		acceptancePollDemandList = append(acceptancePollDemandList, element)
+		if len(itemInfo)!=0 {
+			element.DemandNodeInfo = itemInfo
+			acceptancePollDemandList = append(acceptancePollDemandList, element)
+		}
 	}
 	acceptancePoll.DemandList = acceptancePollDemandList
 	acceptancePoll.Total = int64(len(acceptancePollDemandList))
@@ -99,16 +109,18 @@ func selectPoolList() (*resp.ResponseDemandPoolList, error) {
 	completePoll := new(resp.ResponseCompletePoll)
 	var completePollDemandList []resp.ResponseDemand
 	for _, element := range result.DemandList {
-		var itemInfo []resp.ResponseDemandNodeInfo
-		for _, item := range element.DemandNodeInfo {
-			if item.Status == global.Finish && item.ItemType == global.CompletePoll {
+		var itemInfo []*resp.ResponseDemandNodeInfo
+		for index, item := range element.DemandNodeInfo {
+			if item.Status == global.Finish && index == len(element.DemandNodeInfo){
 				itemInfo = append(itemInfo, item)
 				break
 			}
 		}
 		//赋值
-		element.DemandNodeInfo = itemInfo
-		completePollDemandList = append(completePollDemandList, element)
+		if len(itemInfo)!=0 {
+			element.DemandNodeInfo = itemInfo
+			completePollDemandList = append(completePollDemandList, element)
+		}
 	}
 	completePoll.DemandList = completePollDemandList
 	completePoll.Total = int64(len(completePollDemandList))
@@ -141,12 +153,13 @@ func updateItem(item *req.RequestDemandItem) error {
 	for _, element := range result.DemandNodeInfo {
 		if element.ItemId == item.ItemId {
 			element.PeoplePhone = item.NodePeoplePhone
+			element.PeopleName = item.PeopleName
 		}
 	}
 	//update
 	return UpdateByDemandIdForItemInfo(item.DemandId, result.DemandNodeInfo)
 }
-func UpdateByDemandIdForItemInfo(demandId int, itemInfo []resp.ResponseDemandNodeInfo) error {
+func UpdateByDemandIdForItemInfo(demandId int, itemInfo []*resp.ResponseDemandNodeInfo) error {
 	//struct -> json
 	info, err := json.Marshal(itemInfo)
 	if err != nil {
@@ -171,6 +184,7 @@ func updateItemTime(item *req.RequestDemandSetTime) error {
 	for _, element := range result.DemandNodeInfo {
 		if element.ItemId == item.ItemId {
 			element.StartTime = item.StartTime
+			element.EndTime = item.EndTime
 		}
 	}
 	//update
@@ -182,6 +196,7 @@ func itemSolve(item *req.RequestDemandItem) error {
 	if err != nil {
 		return err
 	}
+
 	//遍历修改数据
 	for _, element := range result.DemandNodeInfo {
 		if element.ItemId == item.ItemId {
@@ -213,25 +228,30 @@ func selectDemandList(limit, offset, demandPhone, isAll, status string) (*resp.R
 	if isAll == "true" { //所有的需求，直接构造返回体
 		return response, err
 	} else { //分配给我的需求
-		sta, _ := strconv.ParseInt(status, 10, 64)
+		sta, _ := strconv.Atoi(status)
 		return selectForMyDemand(response, l, o, demandPhone, sta)
 	}
 }
 
-func selectForMyDemand(result *resp.ResponseDemandList, limit, offset int, demandPhone string, status int64) (*resp.ResponseDemandList, error) {
+func selectForMyDemand(result *resp.ResponseDemandList, limit, offset int, demandPhone string, status int) (*resp.ResponseDemandList, error) {
 	//筛选出跟我相关的需求
 	//构建需求slice
 	var demandForAllMyList []resp.ResponseDemand
 	for _, demandList := range result.DemandList {
+		var flag = false
 		//构建分配给我的需求节点info slice
-		var nodeForMyInfo []resp.ResponseDemandNodeInfo
+		var nodeForMyInfo []*resp.ResponseDemandNodeInfo
 		for _, node := range demandList.DemandNodeInfo {
 			//将分配给我的需求，放入构建的需求节点info slice
 			if node.PeoplePhone == demandPhone && node.Status == status {
 				nodeForMyInfo = append(nodeForMyInfo, node)
+				flag = true
 			}
 		}
-		demandForAllMyList = append(demandForAllMyList, demandList)
+		if flag {
+			demandList.DemandNodeInfo = nodeForMyInfo
+			demandForAllMyList = append(demandForAllMyList, demandList)
+		}
 	}
 	total := int64(len(demandForAllMyList))
 
@@ -291,6 +311,7 @@ func createDemand(demand *req.RequestDemand) error {
 		DemandInfo:           string(b),
 		BusinessId:           demand.BusinessId,
 		PeoplePhone:          demand.PeoplePhone,
+		ModelId: 			  demand.ModelId,
 	}
 	if err := database.CreateDemand(dbDemand); err != nil {
 		logrus.Errorf("insert demand param:%v,failed error :%s", demand, err.Error())
@@ -320,7 +341,7 @@ func buildDemandResultList(result []domain.Demand, total int64, limit, offset in
 
 func buildDemandResult(element *domain.Demand) (*resp.ResponseDemand, error) {
 	entry := new(resp.ResponseDemand)
-	var i []resp.ResponseDemandNodeInfo
+	var i []*resp.ResponseDemandNodeInfo
 	entry.DemandName = element.DemandName
 	entry.DemandLink = element.DemandLink
 	entry.PeoplePhone = element.PeoplePhone
@@ -328,6 +349,7 @@ func buildDemandResult(element *domain.Demand) (*resp.ResponseDemand, error) {
 	entry.DemandNote = element.DemandNote
 	entry.BusinessId = element.BusinessId
 	entry.DemandId = element.DemandId
+	entry.ModelId = element.ModelId
 	if err := json.Unmarshal([]byte(element.DemandInfo), &i); err != nil {
 		logrus.Errorf("demand node info json Unmarshal error:%s", err.Error())
 		return nil, errors.New(errors.ServerError, err.Error())

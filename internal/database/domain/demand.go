@@ -9,4 +9,5 @@ type Demand struct {
 	DemandInfo           string `gorm:"column:info"`
 	BusinessId           int    `gorm:"column:business_id"`
 	PeoplePhone          string `gorm:"column:user_id"`
+	ModelId				 int	`gorm:"column:model_id"`
 }

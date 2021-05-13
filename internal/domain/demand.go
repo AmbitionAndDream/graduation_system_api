@@ -7,6 +7,7 @@ type RequestDemand struct {
 	DemandNote           string              `json:"note"`
 	BusinessId           int                 `json:"business_id" binding:"required"`
 	PeoplePhone          string              `json:"user_id" binding:"required"` //需求负责人(创建)
+	ModelId				 int				 `json:"model_id" binding:"required"`
 	DemandNodeInfo       []RequestDemandInfo `json:"info" binding:"required"`
 }
 
@@ -19,13 +20,14 @@ type RequestDemandInfo struct {
 	PeopleName  string `json:"user_name"`
 	StartTime   int64  `json:"start_time"`
 	EndTime		int64  `json:"end_time"`
-	Status      int64  `json:"status" binding:"required"`
+	Status      int    `json:"status" binding:"required"`
 }
 
 type RequestDemandItem struct {
 	ItemId          int    `json:"item_id" binding:"required"`
 	DemandId        int    `json:"demand_id" binding:"required"`
 	NodePeoplePhone string `json:"user_id" binding:"required"`
+	PeopleName		string `json:"user_name" binding:"required"`
 }
 
 type RequestDemandSetTime struct {
@@ -55,7 +57,8 @@ type ResponseDemand struct {
 	DemandNote           string                   `json:"note"`
 	BusinessId           int                      `json:"business_id"`
 	PeoplePhone          string                   `json:"user_id"`
-	DemandNodeInfo       []ResponseDemandNodeInfo `json:"info"`
+	ModelId				 int				 	  `json:"model_id"`
+	DemandNodeInfo       []*ResponseDemandNodeInfo `json:"info"`
 }
 
 type ResponseDemandNodeInfo struct {
@@ -67,7 +70,7 @@ type ResponseDemandNodeInfo struct {
 	PeopleName  string `json:"user_name"`
 	StartTime   int64  `json:"start_time"`
 	EndTime		int64  `json:"end_time"`
-	Status      int64  `json:"status"`
+	Status      int    `json:"status"`
 }
 
 type ResponseDemandPoolList struct {

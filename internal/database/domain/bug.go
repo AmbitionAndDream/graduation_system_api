@@ -1,7 +1,7 @@
 package domain
 
 type Bug struct {
-	SystemId       int    `gorm:"column:system_id" `
+	SystemId       int    `gorm:"column:system_id"`
 	BugId          int    `gorm:"column:id"`
 	DemandId       int    `gorm:"column:demand_id"`
 	BugName        string `gorm:"column:bug_name"`
@@ -13,4 +13,5 @@ type Bug struct {
 	BeginTime      int64  `gorm:"column:begin_time"`
 	SolveType      int    `gorm:"column:solve_type"`
 	Desc           string `gorm:"column:bug_desc"`
+	Status		   int    `gorm:"column:status"`
 }

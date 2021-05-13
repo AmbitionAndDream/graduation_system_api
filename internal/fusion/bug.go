@@ -16,7 +16,9 @@ func selectBugList(bug *req.BugList) (*resp.ResponseBugList, error) {
 	bugDb.BeginTime = bug.BeginTime
 	var b []domain.Bug
 	var err error
-	if bug.IsAssign == global.ReporterId {
+	if bug.IsAssign == 3 {
+		b, err = database.SelectBugAll(bug)
+	}else if bug.IsAssign == global.ReporterId {
 		b, err = database.SelectBugListHandler(bug)
 	} else {
 		b, err = database.SelectBugListReporter(bug)
@@ -74,6 +76,7 @@ func buildBugResult(element *domain.Bug) (*resp.ResponseBug, error) {
 		Opportunity:    element.Opportunity,
 		BeginTime:      element.BeginTime,
 		SolveType:      element.SolveType,
+		Status:		    element.Status,
 	}, nil
 }
 
@@ -88,6 +91,7 @@ func createBug(reqBug *req.RequestBug) error {
 	bug.BeginTime = time.Now().UnixNano() / 1000000
 	bug.BugName = reqBug.BugName
 	bug.PriorityStatus = reqBug.PriorityStatus
+	bug.Status = 1
 	if err := database.CreateBug(bug); err != nil {
 		logrus.Errorf("create bug :%v,failed error :%s", bug, err.Error())
 		return errors.New(errors.ServerError, "create bug failed")

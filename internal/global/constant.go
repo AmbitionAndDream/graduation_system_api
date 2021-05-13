@@ -31,17 +31,17 @@ const (
 
 //item status
 const (
-	Finish    = 1
-	NotFinish = 0
+	Finish    = 2
+	NotFinish = 1
 )
 
 //item type
 const (
-	ReviewPoll = iota
-	DevelopmentPoll
-	TestPoll
-	AcceptancePoll
-	CompletePoll
+	ReviewPoll = 1
+	DevelopmentPoll = 2
+	TestPoll = 3
+	AcceptancePoll = 4
+	//CompletePoll
 )
 
 const (

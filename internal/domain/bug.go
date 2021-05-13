@@ -30,6 +30,7 @@ type BugList struct {
 	Opportunity    int	  `json:"opportunity"`
 	IsAssign       int	  `json:"is_assign"`
 	PriorityStatus int    `json:"priority_status"`
+	SystemId       int    `json:"system_id"`
 	PeoplePhone    string `json:"phone"`
 }
 
@@ -52,4 +53,5 @@ type ResponseBug struct {
 	Opportunity    int    `json:"opportunity"`
 	BeginTime      int64  `json:"begin_time"`
 	SolveType      int    `json:"solve_type"`
+	Status		   int    `json:"status"`
 }

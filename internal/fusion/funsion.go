@@ -98,7 +98,7 @@ func (f *newFusionHandler) HandleDemandEvent(ctx *gin.Context) (resp interface{}
 			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
 			return nil, errors.New(http.StatusBadRequest, "url 参数有误")
 		}
-		if (isAll != "true" && isAll != "false") || (status != "0" && status != "1") {
+		if (isAll != "true" && isAll != "false") || (status != "1" && status != "2" && status!="3" && status !="4") {
 			logrus.Errorf("HandleDemandEvent url param error ,url:%s", ctx.Request.URL.String())
 			return nil, errors.New(http.StatusBadRequest, "url 参数有误")
 		}
@@ -167,6 +167,7 @@ func getBugParam(ctx *gin.Context) (*domain.BugList, error) {
 	opportunity := ctx.Query("opportunity")
 	priorityStatus := ctx.Query("priority_status")
 	phone := ctx.Query("user_id")
+	system := ctx.Query("system_id")
 	if !checkParam(limit, offset, phone) {
 		logrus.Errorf("HandleBugEvent url param error ,url:%s", ctx.Request.URL.String())
 		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
@@ -181,6 +182,7 @@ func getBugParam(ctx *gin.Context) (*domain.BugList, error) {
 	ps, _ := strconv.Atoi(priorityStatus)
 	bt, _ := strconv.ParseInt(beginTime, 10, 64)
 	et, _ := strconv.ParseInt(endTime, 10, 64)
+	sys, _ := strconv.Atoi(system)
 	return &domain.BugList{
 		Limit:          l,
 		Offset:         o,
@@ -193,6 +195,7 @@ func getBugParam(ctx *gin.Context) (*domain.BugList, error) {
 		PriorityStatus: ps,
 		EndTime:        et,
 		PeoplePhone:    phone,
+		SystemId:       sys,
 	}, nil
 }
 
