@@ -19,6 +19,9 @@ const (
 	Item               = "item"
 	SelectPoolList     = "pool_list"
 	Detail             = "detail"
+	BugNum			   = "bug_num"
+	SolveNum		   = "bug_solve_num"
+	DemandNum		   = "demand"
 )
 
 //kind
@@ -27,6 +30,7 @@ const (
 	Business = "business"
 	Demand   = "demand"
 	Bug      = "bug"
+	Data	 = "data"
 )
 
 //item status

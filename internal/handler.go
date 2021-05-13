@@ -53,6 +53,8 @@ func Handler(ctx *gin.Context) {
 		resp, err = fusionHandler.HandleDemandEvent(ctx)
 	case global.Bug:
 		resp, err = fusionHandler.HandleBugEvent(ctx)
+	case global.Data:
+		resp, err = fusionHandler.HandleDataEvent(ctx)
 	default:
 		logrus.Errorf("url param error ,url:%s", ctx.Request.URL.String())
 		util.BuildFailedResp(ctx, http.StatusBadRequest, errors.New(http.StatusBadRequest, "url 参数有误"))
