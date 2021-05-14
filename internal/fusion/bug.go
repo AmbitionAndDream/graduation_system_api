@@ -77,6 +77,7 @@ func buildBugResult(element *domain.Bug) (*resp.ResponseBug, error) {
 		BeginTime:      element.BeginTime,
 		SolveType:      element.SolveType,
 		Status:		    element.Status,
+		Desc:  			element.Desc,
 	}, nil
 }
 
@@ -92,6 +93,7 @@ func createBug(reqBug *req.RequestBug) error {
 	bug.BugName = reqBug.BugName
 	bug.PriorityStatus = reqBug.PriorityStatus
 	bug.Status = 1
+	bug.Desc = reqBug.Desc
 	if err := database.CreateBug(bug); err != nil {
 		logrus.Errorf("create bug :%v,failed error :%s", bug, err.Error())
 		return errors.New(errors.ServerError, "create bug failed")

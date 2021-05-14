@@ -54,4 +54,5 @@ type ResponseBug struct {
 	BeginTime      int64  `json:"begin_time"`
 	SolveType      int    `json:"solve_type"`
 	Status		   int    `json:"status"`
+	Desc 		   string `json:"desc"`
 }
