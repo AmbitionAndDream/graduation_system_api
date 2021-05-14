@@ -282,3 +282,16 @@ func checkParam(date ...interface{}) bool {
 	}
 	return true
 }
+
+func (f *newFusionHandler) HandleDataEvent (ctx *gin.Context) (resp interface{}, err error) {
+	action := ctx.Param("action")
+	switch action {
+	case global.BugNum:
+		t := ctx.Query("type")
+		return selectBugNum(t)
+	default:
+		logrus.Errorf("HnadleDataEvent url param error ,url:%s", ctx.Request.URL.String())
+		return nil, errors.New(http.StatusBadRequest, "url 参数有误")
+	}
+
+}
