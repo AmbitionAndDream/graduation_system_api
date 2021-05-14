@@ -10,4 +10,5 @@ type Demand struct {
 	BusinessId           int    `gorm:"column:business_id"`
 	PeoplePhone          string `gorm:"column:user_id"`
 	ModelId				 int	`gorm:"column:model_id"`
+	BeginTime			 int64	`gorm:"column:begin_time"`
 }

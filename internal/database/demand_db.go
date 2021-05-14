@@ -66,3 +66,10 @@ func CreateDemand(demand *domain.Demand) error {
 	result := db.Table("demand").Create(demand)
 	return result.Error
 }
+
+func SelectDemandByTime(beginTime, endTime int64) (int64, error) {
+	db := global.GetDb()
+	var demand []domain.Demand
+	result := db.Table("demand").Where("begin_time>? AND begin_time<?",beginTime, endTime ) .Find(&demand)
+	return result.RowsAffected, result.Error
+}

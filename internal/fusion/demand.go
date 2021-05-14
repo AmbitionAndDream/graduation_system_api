@@ -10,6 +10,7 @@ import (
 	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/global"
 	"strconv"
+	"time"
 )
 
 func deleteDemand(ids []int) error {
@@ -312,6 +313,7 @@ func createDemand(demand *req.RequestDemand) error {
 		BusinessId:           demand.BusinessId,
 		PeoplePhone:          demand.PeoplePhone,
 		ModelId: 			  demand.ModelId,
+		BeginTime: 			  time.Now().UnixNano() / 1000000,
 	}
 	if err := database.CreateDemand(dbDemand); err != nil {
 		logrus.Errorf("insert demand param:%v,failed error :%s", demand, err.Error())
