@@ -2,40 +2,58 @@ package internal
 
 import (
 	"github.com/gin-gonic/gin"
+	"graduation_system_api/internal/auth"
 	"graduation_system_api/internal/errors"
 	"graduation_system_api/internal/fusion"
 	"graduation_system_api/internal/util"
-	"net/http"
+	// "log"
 )
 
-var fusionHandler =fusion.GetFusionHandler()
+var fusionHandler = fusion.GetFusionHandler()
 
-func Login(ctx *gin.Context){
-	resp,err := fusionHandler.HandlerLoginEvent(ctx)
-	if err != nil{
+func Login(ctx *gin.Context) {
+	resp, err := fusionHandler.HandlerLoginEvent(ctx)
+	if err != nil {
 		er := err.(*errors.Error)
-		util.BuildFailedResp(ctx,er.Code(),er)
+		util.BuildFailedResp(ctx, er.Code(), er)
 		return
 	}
-	util.BuildSuccessResp(ctx,resp)
+	util.BuildSuccessResp(ctx, resp)
 }
 
-
-func Handler(ctx *gin.Context){
+func Handler(ctx *gin.Context) {
 	//从Header 获取token 进行check
-	//fusionHandler.HandleFrontierEvent(ctx)
-	if http.MethodGet == ctx.Request.Method {
-		util.BuildSuccessResp(ctx, struct {
-			Name string `json:"name"`
-			Age int `json:"age"`
-		}{"heihei",15})
+	token := ctx.GetHeader("authorized")
+	if token == "" {
+		util.BuildFailedResp(ctx, errors.TokenMissError, errors.New(errors.TokenMissError, "token miss errored"))
+		return
+	}
+	if err := auth.CheckToken(token); err != nil {
+		er := err.(*errors.Error)
+		util.BuildFailedResp(ctx, er.Code(), er)
+		return
+	}
 
-	}else if http.MethodPost == ctx.Request.Method{
-		//util.BuildFailedResp(ctx,702,errors.New("token expired"))
-
-	}else {
-		//构造response
-
+	// 判断kind 找对应handle
+	kind := ctx.Param("kind")
+	switch kind {
+	case "people":
+		resp, err := fusionHandler.HandlePeopleEvent(ctx)
+		if err != nil {
+			er := err.(*errors.Error)
+			util.BuildFailedResp(ctx, er.Code(), er)
+			return
+		}
+		util.BuildSuccessResp(ctx, resp)
+		return
+	case "business":
+		resp, err := fusionHandler.HandleBusinessEvent(ctx)
+		if err != nil {
+			er := err.(*errors.Error)
+			util.BuildFailedResp(ctx, er.Code(), er)
+			return
+		}
+		util.BuildSuccessResp(ctx, resp)
+		return
 	}
 }
-
